@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Perfil Accedido</title>
+</head>
+<body>
+
+    <h1>Perfil Accedido</h1>
+
+    {% if error %}
+        <div>
+            <p><strong>Error:</strong> {{ error }}</p>
+        </div>
+    {% endif %}
+
+    <h2>Detalles del Perfil</h2>
+    <p><strong>Profile ID:</strong> {{ profile_id }}</p>
+
+    <h3>Tablas en la Base de Datos del Perfil:</h3>
+    <div>
+        {% if vault_tables %}
+            <table>
+                <thead>
+                    <tr>
+                        <th>Nombre de la Tabla</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for table in vault_tables %}
+                        <tr>
+                            <td>{{ table.0 }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p>No se encontraron tablas en la base de datos.</p>
+        {% endif %}
+    </div>
+
+</body>
+</html>
