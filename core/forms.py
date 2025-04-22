@@ -18,5 +18,19 @@ class ProfileForm(forms.ModelForm):
         return cleaned_data
 
 class LoginProfileForm(forms.Form):
-    name = forms.CharField(label='Profile Name')
-    password = forms.CharField(widget=forms.PasswordInput, label='Profile Master Password')
+    name = forms.CharField(label='Vault Name')
+    password = forms.CharField(widget=forms.PasswordInput, label='Vault Master Password')
+
+class CredentialForm(forms.Form):
+    service = forms.CharField(label='Service', widget=forms.TextInput(attrs={
+        'class': 'w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-150 ease-in-out'
+    }))
+    description = forms.CharField(label='Description', widget=forms.TextInput(attrs={
+        'class': 'w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-150 ease-in-out'
+    }))
+    username = forms.CharField(label='Username', widget=forms.TextInput(attrs={
+        'class': 'w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-150 ease-in-out'
+    }))
+    password = forms.CharField(label='Password', widget=forms.PasswordInput(attrs={
+        'class': 'w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-150 ease-in-out'
+    }))

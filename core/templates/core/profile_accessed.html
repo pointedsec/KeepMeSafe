@@ -1,44 +1,118 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Perfil Accedido</title>
-</head>
-<body>
+{% extends 'layout/base.html' %}
 
-    <h1>Perfil Accedido</h1>
+{% block title %}Vault de {{ profile.name }} - KeepMeSafe{% endblock %}
 
-    {% if error %}
-        <div>
-            <p><strong>Error:</strong> {{ error }}</p>
-        </div>
-    {% endif %}
+{% block content %}
+<div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-10">
+    <!-- Title -->
+    <h1 class="text-center text-4xl font-bold text-gray-900">🔐 {{ profile.name }} Vault</h1>
 
-    <h2>Detalles del Perfil</h2>
-    <p><strong>Profile ID:</strong> {{ profile_id }}</p>
+    <!-- New credential form -->
+    <div class="bg-white border border-gray-200 rounded-xl shadow p-6">
+        <h2 class="text-xl font-semibold text-gray-800 mb-6">➕ Create new credential</h2>
+        <form method="post" class="grid md:grid-cols-2 gap-6">
+            {% csrf_token %}
+            {% for field in form %}
+            <div class="col-span-1">
+                <label class="block text-sm font-medium text-gray-700 mb-1">{{ field.label }}</label>
+                <div class="relative">
+                    {{ field }}
+                </div>
+                {% if field.errors %}
+                <p class="mt-1 text-sm text-red-600">{{ field.errors }}</p>
+                {% endif %}
+            </div>
+            {% endfor %}
+            <div class="md:col-span-2">
+                <button type="submit"
+                    class="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 px-4 rounded-lg text-sm font-medium transition">
+                    Save credential
+                </button>
+            </div>
+        </form>
+    </div>
 
-    <h3>Tablas en la Base de Datos del Perfil:</h3>
-    <div>
-        {% if vault_tables %}
-            <table>
-                <thead>
+    <!-- Credentials table -->
+    <div class="bg-white border border-gray-200 rounded-xl shadow p-6">
+        {% if credentials %}
+        <div class="overflow-x-auto">
+            <table class="w-full table-auto text-sm text-gray-800">
+                <thead class="bg-gray-50 border-b font-semibold">
                     <tr>
-                        <th>Nombre de la Tabla</th>
+                        <th class="px-4 py-2 text-left">Service</th>
+                        <th class="px-4 py-2 text-left">Description</th>
+                        <th class="px-4 py-2 text-left">Username</th>
+                        <th class="px-4 py-2 text-left">Password</th>
+                        <th class="px-4 py-2 text-left">Actions</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {% for table in vault_tables %}
-                        <tr>
-                            <td>{{ table.0 }}</td>
-                        </tr>
+                    {% for id, service, description, username, password in credentials %}
+                    <tr class="border-b hover:bg-gray-50">
+                        <td class="px-4 py-2">{{ service }}</td>
+                        <td class="px-4 py-2">{{ description|default:"—" }}</td>
+                        <td class="px-4 py-2">{{ username }}</td>
+                        <td class="px-4 py-2 font-mono truncate">
+                            <input type="password" value="{{ password }}" readonly
+                                class="bg-transparent w-full cursor-default" />
+                        </td>
+                        <td class="px-4 py-2 space-x-2">
+                            <form method="post" class="inline-block">
+                                {% csrf_token %}
+                                <button type="submit" name="delete_credential" value="{{ id }}"
+                                    onclick="return confirm('Delete this credential?')"
+                                    class="text-white bg-red-600 hover:bg-red-700 px-3 py-1 rounded-md text-sm transition mt-2 md:mt-0">
+                                    Delete
+                                </button>
+                            </form>
+                            <button onclick="toggleEditForm({{ id }})"
+                                class="text-black bg-yellow-300 hover:bg-yellow-400 px-3 py-1 rounded-md text-sm transition mt-2 md:mt-0">
+                                Edit
+                            </button>
+                        </td>
+                    </tr>
+
+                    <!-- Edit Form -->
+                    <tr id="edit-form-{{ id }}" class="hidden">
+                        <td colspan="5">
+                            <div class="bg-gray-100 border border-gray-300 rounded-lg p-6 mt-2 shadow-inner">
+                                <form method="post" class="grid md:grid-cols-5 gap-4 items-center">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="edit_credential" value="{{ id }}">
+
+                                    <input type="text" name="edited_service" value="{{ service }}" placeholder="Service"
+                                        class="border border-gray-300 rounded-md px-3 py-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                    <input type="text" name="edited_description" value="{{ description }}"
+                                        placeholder="Description"
+                                        class="border border-gray-300 rounded-md px-3 py-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                    <input type="text" name="edited_user" value="{{ username }}" placeholder="Username"
+                                        class="border border-gray-300 rounded-md px-3 py-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                    <input type="password" name="edited_password" value="{{ password }}"
+                                        placeholder="Password"
+                                        class="border border-gray-300 rounded-md px-3 py-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500">
+
+                                    <button type="submit"
+                                        class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md w-full text-sm font-medium transition">
+                                        Save
+                                    </button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
                     {% endfor %}
                 </tbody>
             </table>
+        </div>
         {% else %}
-            <p>No se encontraron tablas en la base de datos.</p>
+        <p class="text-center text-gray-500">No saved credentials yet.</p>
         {% endif %}
     </div>
+</div>
 
-</body>
-</html>
+<script>
+    function toggleEditForm(credentialId) {
+        const form = document.getElementById('edit-form-' + credentialId);
+        form.classList.toggle('hidden');
+    }
+</script>
+{% endblock %}

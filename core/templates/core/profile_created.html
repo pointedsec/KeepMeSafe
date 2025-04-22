@@ -1,11 +1,19 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <title>Profile Created</title>
-</head>
-<body>
-  <h1>Perfil creado correctamente</h1>
-  <p>ID del perfil: {{ profile_id }}</p>
-  <a href="{% url 'create_profile' %}">Crear otro</a>
-</body>
-</html>
+{% extends 'layout/base.html' %}
+
+{% block title %}Vault Created - KeepMeSafe{% endblock %}
+
+{% block content %}
+<div class="max-w-md mx-auto mt-20 bg-white p-8 rounded-xl shadow-md text-center">
+    <h1 class="text-2xl font-semibold text-gray-800 mb-4">✅ Vault was created succesfully</h1>
+    <p class="text-gray-600 mb-6">Vault ID: <span class="font-mono text-blue-600">{{ profile_id }}</span></p>
+
+    <div class="flex flex-col gap-3">
+        <a href="{% url 'create_profile' %}" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-md transition">
+            Create other vault
+        </a>
+        <a href="/" class="w-full border border-blue-600 text-blue-600 hover:bg-blue-50 font-medium py-2 px-4 rounded-md transition">
+            Login into a vault
+        </a>
+    </div>
+</div>
+{% endblock %}
