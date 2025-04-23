@@ -1,0 +1,7 @@
+db.sqlite3
+./media/vaults/*
+media/vaults/*
+*/__pycache__/*
+__pycache__/*
+*/__pycache__
+__pycache__
