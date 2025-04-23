@@ -1,0 +1,20 @@
+{% extends 'layout/base.html' %}
+{% block title %}Admin Authentication{% endblock %}
+
+{% block content %}
+<div class="max-w-md mx-auto mt-20 bg-white p-8 rounded-xl shadow-md">
+    <h1 class="text-xl font-semibold text-gray-800 mb-4 text-center">Enter Admin Password</h1>
+    {% if error %}
+    <p class="text-red-500 text-sm mb-4 text-center">{{ error }}</p>
+    {% endif %}
+    <form method="post" class="space-y-4">
+        {% csrf_token %}
+        <input type="password" name="admin_password" placeholder="Admin password"
+               class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none">
+        <button type="submit"
+                class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-md transition">
+            Access
+        </button>
+    </form>
+</div>
+{% endblock %}
