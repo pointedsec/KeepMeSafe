@@ -55,7 +55,7 @@ def check_master_key(profile, password):
     """
     Checks if the master key can decrypt his vault
     """
-    logging.info('Trying to decrypt the vault')
+    logger.info('Trying to decrypt the vault')
     vault_path = profile.vault_path.path
     cipher_suite, b64_key = gen_master_key(password)
 
@@ -63,10 +63,10 @@ def check_master_key(profile, password):
         with open(vault_path, 'rb') as f:
             encrypted_data = f.read()
         cipher_suite.decrypt(encrypted_data)
-        logging.info('Vault decrypted for profile %s!', profile.name)
+        logger.info('Vault decrypted for profile %s!', profile.name)
         return True
     except Exception as e:
-        logging.debug('Error decrypting the vault %s', e)
+        logger.debug('Error decrypting the vault %s', e)
         return False
     
 def save_database(vault_path: str, temp_vault, cipher: Fernet) -> None:
@@ -74,14 +74,14 @@ def save_database(vault_path: str, temp_vault, cipher: Fernet) -> None:
     Re-encrypts the vault from the temporary SQLite database and saves it back to the original path.
     """
     try:
-        # Volver a posicionar el puntero del archivo al inicio para leerlo completo
+        # Seek to the beginning of the file to ensure full read
         temp_vault.seek(0)
         decrypted_data = temp_vault.read()
 
-        # Encriptar los datos
+        # Encrypt the data
         encrypted_data = cipher.encrypt(decrypted_data)
 
-        # Guardar sobre el vault original
+        # Save in the original vault (replaces the file with the encrypted data)
         with open(vault_path, 'wb') as f:
             f.write(encrypted_data)
 
