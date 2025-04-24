@@ -1,6 +1,6 @@
 <p align="center">
   <!-- Insert logo here -->
-  <img src="./core/static/kms_basic_logo.png" alt="KeepMeSafe Logo" width="100" />
+  <img src="./core/static/kms_basic_logo_2.png" alt="KeepMeSafe Logo" width="100" />
 </p>
 
 <h1 align="center">KeepMeSafe</h1>
