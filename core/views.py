@@ -140,7 +140,6 @@ def profile_accessed(request, profile_id):
                     edited_description = request.POST['edited_description']
                     edited_user = request.POST['edited_user']
                     edited_password = request.POST['edited_password']
-                    print(credential_id, edited_service, edited_description, edited_user, edited_password)
                     cursor.execute("UPDATE credentials SET service = ?, description = ?, username = ?, password = ? WHERE id = ?", (edited_service, edited_description, edited_user, edited_password, credential_id))
                     conn.commit()
                     logger.info('Updated credential in vault %s', profile.name)
@@ -178,14 +177,12 @@ def delete_vault(request, profile_id):
             logger.error('Cant delete vault without vault key..')
             return HttpResponseServerError('Error decrypting or loading the vault, vault key not found in the actual session')
 
-        
         try:
             logger.info('Fernet created with vault key')
             cipher = Fernet(encoded_key.encode())
         except Exception as e:
             logger.error("Error decoding vault key: %s", e)
             return HttpResponseServerError('Error decrypting or loading the vault: %s', e)
-
 
         profile = get_object_or_404(Profile, id=profile_id)
         vault_path = profile.vault_path.path
