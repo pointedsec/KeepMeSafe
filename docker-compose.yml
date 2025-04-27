@@ -1,0 +1,22 @@
+services:
+  web:
+    build: .
+    container_name: keepmesafe
+    ports:
+      - "8000:8000"
+    volumes:
+      - media:/app/media
+      - db_data:/app/db
+    environment:
+      DJANGO_SETTINGS_MODULE: keepmesafe.settings
+      DJANGO_SECRET_KEY: ${DJANGO_SECRET_KEY}
+      DEBUG: ${DEBUG}
+      DJANGO_ALLOWED_HOSTS: ${DJANGO_ALLOWED_HOSTS}
+      ADMIN_VAULT_PASSWORD: ${ADMIN_VAULT_PASSWORD}
+    env_file:
+      - .env
+    restart: always
+
+volumes:
+  media:
+  db_data:
