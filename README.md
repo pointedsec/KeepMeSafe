@@ -3,7 +3,7 @@
   <img src="./core/static/kms_basic_logo_2.png" alt="KeepMeSafe Logo" width="100" />
 </p>
 
-<h1 align="center">KeepMeSafe</h1>
+<h1 align="center">KeepMeSafe (KMS) </h1>
 
 <p align="center">
   🔐 A secure, multi-profile password manager inspired by KeePass. <br/>
