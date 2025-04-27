@@ -23,13 +23,16 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Stage 2: Production stage
 FROM python:3.13-slim
  
+# Create user, app directory, and ensure all necessary directories are created with correct permissions
 RUN useradd -m -r appuser && \
-   mkdir /app && \
-   chown -R appuser /app && \
-   mkdir /app/db && \
-   chown -R appuser /app/db && \
-   mkdir /app/staticfiles && \
-   chown -R appuser /app/staticfiles
+    mkdir -p /app && \
+    mkdir -p /app/db && \
+    mkdir -p /app/staticfiles && \
+    mkdir -p /app/media/vaults && \
+    chown -R appuser:appuser /app && \
+    chown -R appuser:appuser /app/db && \
+    chown -R appuser:appuser /app/staticfiles && \
+    chown -R appuser:appuser /app/media
  
 # Copy the Python dependencies from the builder stage
 COPY --from=builder /usr/local/lib/python3.13/site-packages/ /usr/local/lib/python3.13/site-packages/
