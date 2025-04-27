@@ -48,14 +48,58 @@ Inspired by simplicity and security, KeepMeSafe is perfect for individual use or
 
 ## 🚧 How to Run
 
+### Manually
+
+First clone the repository in your machine and install the dependencies.
 ```bash
 git clone https://github.com/pointedsec/keepmesafe.git
 cd keepmesafe
 python -m venv env
 source env/bin/activate
 pip install -r requirements.txt
+```
+
+Then edit the `.env` file to your preferences.
+```
+DJANGO_SECRET_KEY=SUPER_SECREY_KEY
+DEBUG=False
+DJANGO_ALLOWED_HOSTS=*
+ADMIN_VAULT_PASSWORD=admin
+```
+`ADMIN_VAULT_PASSWORD` is the required administration password for creating new vaults so any random in internet can create vaults in your application.
+
+Lastly, run the migrations and execute the server, you can use `gunicorn` too if you want.
+```bash
 python manage.py migrate
 python manage.py runserver
+```
+
+The app will be available at: http://127.0.0.1:8000
+
+
+### Using Docker
+First clone the repository in your machine.
+```bash
+git clone https://github.com/pointedsec/keepmesafe.git
+cd keepmesafe
+```
+
+Then edit the `.env` file to your preferences.
+```
+DJANGO_SECRET_KEY=SUPER_SECREY_KEY
+DEBUG=False
+DJANGO_ALLOWED_HOSTS=*
+ADMIN_VAULT_PASSWORD=admin
+```
+
+Now build the docker image
+```bash
+docker build -t keepmesafe .
+```
+
+And now use docker compose to create an instance of the image.
+```bash
+docker compose up --build
 ```
 
 The app will be available at: http://127.0.0.1:8000
@@ -65,7 +109,7 @@ The app will be available at: http://127.0.0.1:8000
 ## 🛡️ Admin Key Protection
 
 To prevent unauthorized access to profile creation:
-The admin key is configured in settings.py as `ADMIN_CREATION_KEY`.
+The admin key is configured in settings.py as `ADMIN_CREATION_KEY`, you can set it through the `.env` file.
 Any attempt to access `/create_profile/` will require this key.
 
 ---
