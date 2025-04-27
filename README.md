@@ -42,7 +42,19 @@ Inspired by simplicity and security, KeepMeSafe is perfect for individual use or
 
 ## 📸 Screenshots
 
-> Coming soon...
+Here are some screenshots showcasing the features of KeepMeSafe:
+
+1. **Main Page**  
+   ![Main Page](./screenshots/main_page.png)
+
+2. **Create Vault**  
+   ![Create Vault](./screenshots/create_vault.png)
+
+3. **Vault**  
+   ![Vault](./screenshots/vault.png)
+
+4. **Edit Credential**  
+   ![Edit Credential](./screenshots/edit_credential.png)
 
 ---
 
