@@ -1,0 +1,12 @@
+asgiref==3.8.1
+cffi==1.17.1
+cryptography==44.0.2
+Django==5.2
+django-admin-interface==0.30.0
+django-colorfield==0.13.0
+django-widget-tweaks==1.5.0
+pillow==11.2.1
+pycparser==2.22
+python-slugify==8.0.4
+sqlparse==0.5.3
+text-unidecode==1.3
