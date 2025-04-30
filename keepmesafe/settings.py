@@ -8,8 +8,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY')
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.environ.get('DEBUG', default=0)
+if os.getenv('DOCKER') == 'False':
+    from dotenv import load_dotenv
+    load_dotenv()
+
+DEBUG = os.environ.get('DEBUG', default=False)
 if os.environ.get('DEBUG') == 'True':
     DEBUG = True
 else:
@@ -40,6 +43,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
 ]
 
 ROOT_URLCONF = 'keepmesafe.urls'
@@ -122,8 +126,9 @@ MEDIA_ROOT = BASE_DIR  / 'media'
 
 ADMIN_VAULT_PASSWORD = os.environ.get('ADMIN_VAULT_PASSWORD', 'admin')
 
-STATIC_URL = '/static/'
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'static'),
-
+    os.path.join(BASE_DIR, 'core', 'static'),
 ]
+
+# Whitenoise config for static files in production (debug=false)
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
