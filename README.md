@@ -83,8 +83,10 @@ ADMIN_VAULT_PASSWORD=admin
 Lastly, run the migrations and execute the server, you can use `gunicorn` too if you want.
 ```bash
 python manage.py migrate
-python manage.py runserver
+DOCKER=False python manage.py runserver
 ```
+
+> **_NOTE:_**  You need to specify the `DOCKER` env variable in the execution runtime to make KeepMeSafe to load the environment variables
 
 The app will be available at: http://127.0.0.1:8000
 
