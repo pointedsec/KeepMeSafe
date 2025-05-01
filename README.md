@@ -80,9 +80,10 @@ ADMIN_VAULT_PASSWORD=admin
 ```
 `ADMIN_VAULT_PASSWORD` is the required administration password to create new vaults. This prevents any random person on the internet from creating vaults in your application.
 
-Lastly, run the migrations and execute the server, you can use `gunicorn` if you want to.
+Lastly, run the migrations, collect the static files, and execute the server, you can use `gunicorn` if you want to.
 ```bash
 python manage.py migrate
+python manage.py collectstatic --noinput
 DOCKER=False python manage.py runserver
 ```
 
