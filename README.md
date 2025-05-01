@@ -78,9 +78,9 @@ DEBUG=False
 DJANGO_ALLOWED_HOSTS=*
 ADMIN_VAULT_PASSWORD=admin
 ```
-`ADMIN_VAULT_PASSWORD` is the required administration password for creating new vaults so any random in internet can create vaults in your application.
+`ADMIN_VAULT_PASSWORD` is the required administration password to create new vaults. This prevents any random person on the internet from creating vaults in your application.
 
-Lastly, run the migrations and execute the server, you can use `gunicorn` too if you want.
+Lastly, run the migrations and execute the server, you can use `gunicorn` if you want to.
 ```bash
 python manage.py migrate
 DOCKER=False python manage.py runserver
