@@ -1,6 +1,6 @@
 # keepmesafe/urls.py
 from django.urls import path
-from .views import profile_accessed, create_profile, profile_created, close_vault, delete_vault, admin_gate, login_profile
+from .views import profile_accessed, create_profile, profile_created, close_vault, delete_vault, admin_gate, login_profile, edit_vault
 
 urlpatterns = [
     path('create_profile/', create_profile, name='create_profile'),
@@ -10,5 +10,6 @@ urlpatterns = [
     path('vault/close/', close_vault, name='close_vault'),
     path('vault/delete/<uuid:profile_id>/', delete_vault, name='delete_vault'),
     path('admin-auth/', admin_gate, name='admin_gate'),
+    path('vault/update/<uuid:profile_id>/', edit_vault, name='edit_vault')
 ]
 
