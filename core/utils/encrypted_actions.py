@@ -5,6 +5,7 @@ from cryptography.fernet import Fernet
 import sqlite3
 import logging
 import tempfile
+import os
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -89,3 +90,43 @@ def save_database(vault_path: str, temp_vault, cipher: Fernet) -> None:
     except Exception as e:
         logger.error("Error saving encrypted vault: %s", e)
         raise
+
+def update_vault_encryption_key(vault_path, cipher: Fernet, password):
+    """
+    Decrypt the user vault with the actual password and encrypt it again using a new vault key.
+    """
+    try:
+        # Read and decrypt the vault
+        with open(vault_path, 'rb') as f:
+            encrypted_data = f.read()
+        decrypted_data = cipher.decrypt(encrypted_data)
+        logger.info('Data decrypted for vault %s', vault_path)
+
+        # Write the vault in a temporal file
+        with tempfile.NamedTemporaryFile(suffix=".sqlite3", delete=False) as temp_vault:
+            temp_vault.write(decrypted_data)
+            temp_vault_path = temp_vault.name
+            logger.info('Temporary decrypted vault file created: %s', temp_vault_path)
+
+        # Create a new key using the new password
+        new_cipher_suite, b64_key = gen_master_key(password)
+
+        # Read the decrypted data and encrypt it again with the new key
+        with open(temp_vault_path, 'rb') as f:
+            data_to_encrypt = f.read()
+        encrypted_data = new_cipher_suite.encrypt(data_to_encrypt)
+
+        # Re-write the original file
+        with open(vault_path, 'wb') as f:
+            f.write(encrypted_data)
+        logger.info('Vault re-encrypted with new key for vault %s', vault_path)
+
+    except Exception as e:
+        logger.error('Error updating encryption key for vault %s: %s', vault_path, e)
+        raise e
+
+    finally:
+        # Delete the temporal file
+        if 'temp_vault_path' in locals() and os.path.exists(temp_vault_path):
+            os.remove(temp_vault_path)
+            logger.info('Temporary file %s removed', temp_vault_path)
